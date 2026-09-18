@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Company Admin Panel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #cbd5e1;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: var(--bg-color); color: var(--text-main); margin: 0; }
+        .box { max-width: 600px; background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin: auto; }
+        h2 { text-align: center; color: var(--primary); font-size: 22px; margin-bottom: 25px; font-weight: 700; }
+        
+        .section-card { background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .section-title { font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        label { display: block; margin-top: 10px; font-weight: 600; font-size: 13px; color: #334155; }
+        input[type="text"], select { width: 100%; padding: 10px 12px; margin-top: 5px; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: #fff; transition: all 0.3s; }
+        input[type="text"]:focus, select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        
+        .row { display: flex; gap: 12px; }
+        .row div { flex: 1; }
+
+        .field-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .field-row input[type="text"] { margin-top: 0; flex: 1; }
+        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; margin-top: 5px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .btn-action { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 6px; margin-top: 20px; font-size: 16px; font-weight: bold; transition: background 0.3s; }
+        .btn-action:hover { background: var(--primary-hover); }
+
+        .btn-danger { background: #ef4444; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 6px; font-size: 12px; font-weight: bold; margin-top: 5px; transition: background 0.3s; }
+        .btn-danger:hover { background: #dc2626; }
+
+        .preview-container { border: 2px dashed var(--primary); padding: 15px; margin-top: 20px; border-radius: 8px; background: #fff; }
+        .preview-title { font-size: 11px; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .download-group { display: flex; gap: 8px; margin-top: 10px; }
+        .download-group button { background: #10b981; margin-top: 0; font-size: 13px; padding: 10px; flex: 1; border: none; color: white; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .download-group button:hover { background: #059669; }
+
+        #qrcode { margin-top: 20px; text-align: center; display: flex; justify-content: center; }
+        .code-output { background: #1e293b; color: #38bdf8; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; word-break: break-all; white-space: pre-wrap; border: 1px solid #334155; max-height: 120px; overflow-y: auto; margin-top: 5px; }
+        .copy-btn { background: #f59e0b; margin-top: 5px; padding: 8px; font-size: 13px; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; width: 100%; }
+        .copy-btn:hover { background: #d97706; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>কম্পানি এডমিন প্যানেল (কাস্টমাইজড)</h2>
+    
+    <div class="section-card">
+        <div class="section-title">১. বেসিক লিংক ও হেডিং ডিজাইন</div>
+        <label>Vercel ওয়েবসাইটের মূল লিংক:</label>
+        <input type="text" id="baseUrl" value="https://your-project.vercel.app/index.html">
+        
+        <label>মূল হেডিং টেক্সট:</label>
+        <input type="text" id="headerText" value="Dutch bangla bank plc" oninput="updatePreview()">
+
+        <div class="row">
+            <div>
+                <label>ফন্ট সাইজ:</label>
+                <select id="headerSize" onchange="updatePreview()">
+                    <option value="18px">স্ট্যান্ডার্ড (18px)</option>
+                    <option value="22px" selected>বড় (22px)</option>
+                    <option value="26px">খুব বড় (26px)</option>
+                </select>
+            </div>
+            <div>
+                <label>হেডিং কালার:</label>
+                <input type="color" id="headerColor" value="#2563eb" style="height: 41px; padding: 2px; width:100%; border-radius:6px; border:1px solid var(--border-color); cursor:pointer;" oninput="updatePreview()">
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div>
+                <label>অ্যালাইনমেন্ট:</label>
+                <select id="headerAlign" onchange="updatePreview()">
+                    <option value="center" selected>মাঝখানে (Center)</option>
+                    <option value="left">বামে (Left)</option>
+                    <option value="right">ডানে (Right)</option>
+                </select>
+            </div>
+            <div>
+                <label>লোগো সাইজ:</label>
+                <select id="logoSize" onchange="updatePreview()">
+                    <option value="30px">ছোট (30px)</option>
+                    <option value="45px" selected>মাঝারি (45px)</option>
+                    <option value="65px">বড় (65px)</option>
+                </select>
+            </div>
+        </div>
+
+        <label style="margin-top: 10px;">লোগো আপলোড বা রিমুভ:</label>
+        <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px;">
+            <input type="file" id="logoFile" accept="image/*" onchange="handleLogoUpload()" style="padding: 6px; flex: 1; background: #fff; border: 1px solid var(--border-color); border-radius: 6px;">
+            <button type="button" class="btn-danger" onclick="removeLogo()" style="margin-top: 0; height: 38px;">লোগো হাইড/মুছুন</button>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-title">২. সার্টিফিকেট ও ডেটা ফিল্ড কনফিগারেশন (সুইচ অন/অফ)</div>
+        
+        <label>কর্মচারী আইডি:</label>
+        <div class="field-row">
+            <input type="text" id="empId" value="1861570025384" oninput="updatePreview()">
+            <label class="toggle-switch"><input type="checkbox" id="chkId" checked onchange="updatePreview()"><span class="slider"></span></label>
+        </div>
+
+        <label>কর্মচারীর নাম:</label>
+        <div class="field-row">
+            <input type="text" id="empName" value="AHAMMAD MAZI" oninput="updatePreview()">
+            <label class="toggle-switch"><input type="checkbox" id="chkName" checked onchange="updatePreview()"><span class="slider"></span></label>
+        </div>
+
+        <label>বেতন বা জমার পরিমাণ:</label>
+        <div class="field-row">
+            <input type="text" id="empAmount" value="5,118,827.42" oninput="updatePreview()">
+            <label class="toggle-switch"><input type="checkbox" id="chkAmount" checked onchange="updatePreview()"><span class="slider"></span></label>
+        </div>
+
+        <label>রিপোর্টের তারিখ:</label>
+        <div class="field-row">
+            <input type="text" id="empDate" value="18-Sep-2026" oninput="updatePreview()">
+            <label class="toggle-switch"><input type="checkbox" id="chkDate" checked onchange="updatePreview()"><span class="slider"></span></label>
+        </div>
+    </div>
+    
+    <div class="preview-container">
+        <div class="preview-title">👁️ লাইভ প্রিভিউ</div>
+        <div id="previewBox" style="text-align: center; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">
+            <span id="prevLogoArea"></span>
+            <h3 id="prevHeaderText" style="margin: 5px 0; font-size: 22px; color: #2563eb;">Dutch bangla bank plc</h3>
+        </div>
+        <div style="font-size: 12px; margin-top: 10px; line-height: 1.6;" id="prevFieldsContainer">
+            <div id="pRowId"><b>ID:</b> <span id="prevId">1861570025384</span></div>
+            <div id="pRowName"><b>Name:</b> <span id="prevName">AHAMMAD MAZI</span></div>
+            <div id="pRowAmount"><b>Amount:</b> <span id="prevAmount">5,118,827.42</span></div>
+            <div id="pRowDate"><b>Date:</b> <span id="prevDate">18-Sep-2026</span></div>
+        </div>
+    </div>
+
+    <button class="btn-action" onclick="generateQR()">QR কোড জেনারেট করুন</button>
+    
+    <div id="qrcode"></div>
+
+    <div id="downloadSection" style="display:none;">
+        <label>হাই-রেজোলিউশন QR কোড ডাউনলোড করুন:</label>
+        <div class="download-group">
+            <button onclick="downloadQR('png')">PNG ডাউনলোড</button>
+            <button onclick="downloadQR('jpg')">JPG ডাউনলোড</button>
+            <button onclick="downloadQR('pdf')">PDF ডাউনলোড</button>
+        </div>
+    </div>
+
+    <div style="margin-top: 15px;">
+        <label>data.js এ বসানোর কোড:</label>
+        <div class="code-output" id="jsCodeOutput">QR তৈরি করলে কোড আসবে...</div>
+        <button class="copy-btn" onclick="copyCode()">কোড কপি করুন</button>
+    </div>
+</div>
+
+<script>
+    let currentEmpId = "";
+    let uploadedLogoBase64 = "";
+
+    function handleLogoUpload() {
+        const fileInput = document.getElementById('logoFile');
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedLogoBase64 = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+
+    function removeLogo() {
+        uploadedLogoBase64 = "";
+        document.getElementById('logoFile').value = "";
+        document.getElementById('prevLogoArea').innerHTML = "";
+        alert('লোগো সফলভাবে রিমুভ বা হাইড করা হয়েছে!');
+    }
+
+    function updatePreview() {
+        const hText = document.getElementById('headerText').value;
+        const hSize = document.getElementById('headerSize').value;
+        const hColor = document.getElementById('headerColor').value;
+        const hAlign = document.getElementById('headerAlign').value;
+        const lSize = document.getElementById('logoSize').value;
+
+        const prevHead = document.getElementById('prevHeaderText');
+        const prevBox = document.getElementById('previewBox');
+        const prevLogoArea = document.getElementById('prevLogoArea');
+
+        prevHead.innerText = hText;
+        prevHead.style.fontSize = hSize;
+        prevHead.style.color = hColor;
+        prevBox.style.textAlign = hAlign;
+
+        if (uploadedLogoBase64) {
+            prevLogoArea.innerHTML = `<img src="${uploadedLogoBase64}" style="height: ${lSize}; vertical-align: middle; margin-right: 8px;">`;
+        } else {
+            prevLogoArea.innerHTML = "";
+        }
+
+        document.getElementById('pRowId').style.display = document.getElementById('chkId').checked ? 'block' : 'none';
+        document.getElementById('pRowName').style.display = document.getElementById('chkName').checked ? 'block' : 'none';
+        document.getElementById('pRowAmount').style.display = document.getElementById('chkAmount').checked ? 'block' : 'none';
+        document.getElementById('pRowDate').style.display = document.getElementById('chkDate').checked ? 'block' : 'none';
+
+        document.getElementById('prevId').innerText = document.getElementById('empId').value;
+        document.getElementById('prevName').innerText = document.getElementById('empName').value;
+        document.getElementById('prevAmount').innerText = document.getElementById('empAmount').value;
+        document.getElementById('prevDate').innerText = document.getElementById('empDate').value;
+    }
+
+    function generateQR() {
+        const baseUrl = document.getElementById('baseUrl').value.trim();
+        const empId = document.getElementById('empId').value.trim();
+        
+        const qrContainer = document.getElementById('qrcode');
+        qrContainer.innerHTML = "";
+        
+        if(!empId) {
+            alert('দয়া করে অন্তত কর্মচারী আইডি পূরণ করুন!');
+            return;
+        }
+
+        currentEmpId = empId;
+        const fullUrl = `${baseUrl}?id=${encodeURIComponent(empId)}`;
+
+        new QRCode(qrContainer, {
+            text: fullUrl,
+            width: 250,
+            height: 250,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        document.getElementById('downloadSection').style.display = 'block';
+
+        const dataObj = {
+            name: document.getElementById('chkName').checked ? document.getElementById('empName').value : "",
+            amount: document.getElementById('chkAmount').checked ? document.getElementById('empAmount').value : "",
+            date: document.getElementById('chkDate').checked ? document.getElementById('empDate').value : "",
+            htext: document.getElementById('headerText').value,
+            hsize: document.getElementById('headerSize').value,
+            hcolor: document.getElementById('headerColor').value,
+            halign: document.getElementById('headerAlign').value,
+            lurl: uploadedLogoBase64,
+            lsize: document.getElementById('logoSize').value
+        };
+
+        const generatedCode = `    "${empId}": {\n` +
+            `        name: "${dataObj.name}",\n` +
+            `        amount: "${dataObj.amount}",\n` +
+            `        date: "${dataObj.date}",\n` +
+            `        htext: "${dataObj.htext}",\n` +
+            `        hsize: "${dataObj.hsize}",\n` +
+            `        hcolor: "${dataObj.hcolor}",\n` +
+            `        halign: "${dataObj.halign}",\n` +
+            `        lurl: "${dataObj.lurl}",\n` +
+            `        lsize: "${dataObj.lsize}"\n` +
+            `    },`;
+        document.getElementById('jsCodeOutput').innerText = generatedCode;
+    }
+
+    function downloadQR(type) {
+        const qrCanvas = document.querySelector('#qrcode canvas');
+        const qrImage = document.querySelector('#qrcode img');
+        let imageSrc = qrCanvas ? qrCanvas.toDataURL("image/png") : (qrImage ? qrImage.src : "");
+
+        if (!imageSrc) { alert('প্রথমে QR কোড তৈরি করুন!'); return; }
+
+        const fileName = `QRCode_${currentEmpId}`;
+        if (type === 'png' || type === 'jpg') {
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = `${fileName}.${type}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else if (type === 'pdf') {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(`QR Code (ID: ${currentEmpId})`, 20, 20);
+            doc.addImage(imageSrc, 'PNG', 40, 30, 120, 120);
+            doc.save(`${fileName}.pdf`);
+        }
+    }
+
+    function copyCode() {
+        const codeText = document.getElementById('jsCodeOutput').innerText;
+        navigator.clipboard.writeText(codeText).then(() => {
+            alert('কোড সফলভাবে কপি হয়েছে!');
+        });
+    }
+
+    updatePreview();
+</script>
+
+</body>
+</html>
