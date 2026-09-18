@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Certificate Verification - Secure Portal</title>
+    <!-- ডাইনামিক ডেটা ফাইল লোড করা -->
+    <script src="data.js"></script>
+    <!-- ফন্ট এবং আইকনের জন্য Google Fonts (Inter & Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #eef2f7;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* প্রফেশনাল ওয়েব হেডার / ন্যাভবার */
+        .web-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-brand img {
+            height: 40px;
+            object-fit: contain;
+        }
+        .security-badge-top {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* মেইন ওয়েব কন্টেইনার (সেন্ট্রালাইজড ওয়াইড লেআউট) */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .verification-card-box {
+            width: 100%;
+            max-width: 650px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        /* কার্ড হেডার */
+        .card-header-section {
+            background: #f8fafc;
+            padding: 24px 30px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        .success-icon-circle {
+            width: 50px;
+            height: 50px;
+            background: #dcfce7;
+            color: #16a34a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 12px auto;
+            font-weight: bold;
+        }
+        .card-header-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .card-header-section p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* ডিটেলস ইনফো গ্রিড / লিস্ট */
+        .details-grid {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .info-item {
+            background: #fcfcfc;
+            border: 1px solid #e8ecf1;
+            border-radius: 8px;
+            padding: 16px 20px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .info-item:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        /* বাম পাশের প্রফেশনাল কালার বার */
+        .info-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+        .bar-blue::before { background: #2563eb; }
+        .bar-red::before { background: #dc2626; }
+        .bar-green::before { background: #16a34a; }
+        .bar-orange::before { background: #d97706; }
+
+        .item-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .bar-blue .item-label { color: #2563eb; }
+        .bar-red .item-label { color: #dc2626; }
+        .bar-green .item-label { color: #16a34a; }
+        .bar-orange .item-label { color: #d97706; }
+
+        .item-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            word-break: break-all;
+        }
+
+        /* প্রফেশনাল ফুটার */
+        .web-footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .web-footer span {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        /* এরর বা ইনভ্যালিড পেজ ডিজাইন */
+        .error-box {
+            padding: 60px 30px;
+            text-align: center;
+        }
+        .error-box h2 {
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+        .error-box p {
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- টপ ওয়েব ন্যাভবার -->
+    <header class="web-header">
+        <div class="header-brand" id="brandHeaderArea">
+            <!-- লোগো এবং টাইটেল ডায়নামিকালি রেন্ডার হবে -->
+        </div>
+        <div class="security-badge-top">
+            🔒 Secure Verification
+        </div>
+    </header>
+
+    <!-- মেইন কন্টেন্ট এরিয়া -->
+    <div class="main-wrapper">
+        <div class="verification-card-box" id="pageContainer">
+            <!-- ডাইনামিক ডেটা লোড হবে -->
+        </div>
+    </div>
+
+    <!-- ওয়েব ফুটার -->
+    <footer class="web-footer">
+        <div>&copy; 2026 Verification System Portal. All Rights Reserved.</div>
+        <div style="margin-top: 4px;">Status: <span id="statusSpan">Verified & Authentic</span></div>
+    </footer>
+
+<script>
+    // URL থেকে Unique ID নেওয়া
+    const urlParams = new URLSearchParams(window.location.search);
+    const accountId = urlParams.get('id');
+
+    const brandArea = document.getElementById('brandHeaderArea');
+    const container = document.getElementById('pageContainer');
+    const statusSpan = document.getElementById('statusSpan');
+
+    if (accountId && verificationData[accountId]) {
+        const data = verificationData[accountId];
+
+        // উপরে লোগো ও টাইটেল সেট করা
+        brandArea.innerHTML = `
+            <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+            <div style="font-family: ${data.fontFamily || 'Inter, Arial, sans-serif'};">
+                ${data.headerHtml}
+            </div>
+        `;
+
+        // মূল ভেরিফিকেশন কার্ড ও ডিটেলস রেন্ডার করা
+        container.innerHTML = `
+            <div class="card-header-section">
+                <div class="success-icon-circle">✓</div>
+                <h2>Account Certificate Verified</h2>
+                <p>The following information was securely retrieved from the official database and verified.</p>
+            </div>
+
+            <div class="details-grid">
+                <div class="info-item bar-blue">
+                    <div class="item-label">Account Number</div>
+                    <div class="item-value">${data.accountNo}</div>
+                </div>
+
+                <div class="info-item bar-red">
+                    <div class="item-label">Account Holder Name</div>
+                    <div class="item-value">${data.name}</div>
+                </div>
+
+                <div class="info-item bar-green">
+                    <div class="item-label">Report Date Balance / Amount</div>
+                    <div class="item-value">${data.amount}</div>
+                </div>
+
+                <div class="info-item bar-orange">
+                    <div class="item-label">Current Balance</div>
+                    <div class="item-value">${data.currentBalance}</div>
+                </div>
+
+                <div class="info-item bar-blue">
+                    <div class="item-label">Report Generation Date</div>
+                    <div class="item-value">${data.date}</div>
+                </div>
+            </div>
+        `;
+
+        if(data.statusText) {
+            statusSpan.innerText = data.statusText;
+        }
+
+    } else {
+        // ফেইলড বা ভুল আইডি হলে
+        brandArea.innerHTML = `<strong>Verification Portal</strong>`;
+        container.innerHTML = `
+            <div class="error-box">
+                <h2>Invalid Request</h2>
+                <p>The verification link is invalid or the requested certificate information could not be found.</p>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
