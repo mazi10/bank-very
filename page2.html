@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Verification - Page 2</title>
+    <!-- ডাইনামিক ডেটা ফাইল লোড করা -->
+    <script src="data.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            color: #333333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 15px;
+        }
+        /* টপ হেডার (লোগো ও টাইটেল) */
+        .top-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .top-header img {
+            height: 40px;
+            object-fit: contain;
+        }
+        .title-area h2 {
+            font-size: 18px;
+            margin: 0;
+            color: #111111;
+        }
+
+        /* ভেরিফিকেশন স্ট্যাটাস ও ইনফো সেকশন */
+        .verification-box {
+            margin-top: 15px;
+        }
+        .status-text {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .status-text span {
+            color: #16a34a;
+        }
+        .info-row {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+        }
+        .info-row strong {
+            width: 150px;
+            color: #444444;
+        }
+        .info-row span {
+            color: #111111;
+        }
+
+        /* ডিভাইডার লাইন */
+        .divider {
+            border: none;
+            border-top: 1px solid #000000;
+            margin: 20px 0 15px 0;
+        }
+
+        /* ফুটার বা কপিরাইট টেক্সট */
+        .footer-text {
+            font-size: 11px;
+            color: #555555;
+            margin-bottom: 25px;
+        }
+
+        /* নিচের ব্যানার বা প্রমোশনাল কার্ড সেকশন */
+        .promo-card {
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-radius: 4px;
+            max-width: 450px;
+        }
+        .promo-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .promo-left img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .promo-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .learn-btn {
+            background: #334155;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .learn-btn:hover {
+            background: #1e293b;
+        }
+
+        /* এরর বা ইনভ্যালিড পেজ ডিজাইন */
+        .error-box {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .error-box h2 {
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <!-- ডাইনামিক ডেটা লোড হবে -->
+</div>
+
+<script>
+    // URL থেকে Unique ID নেওয়া
+    const urlParams = new URLSearchParams(window.location.search);
+    const accountId = urlParams.get('id');
+    const container = document.getElementById('mainContainer');
+
+    if (accountId && employeesData[accountId]) {
+        const data = employeesData[accountId];
+
+        container.innerHTML = `
+            <!-- টপ হেডার -->
+            <div class="top-header">
+                <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+                <div class="title-area" style="font-family: ${data.fontFamily || 'Arial, sans-serif'};">
+                    ${data.headerHtml}
+                </div>
+            </div>
+
+            <!-- ভেরিফিকেশন স্ট্যাটাস ও ডিটেলস -->
+            <div class="verification-box">
+                <div class="status-text">
+                    Verification Status: <span id="statusSpan">${data.statusText || 'Verification success!!!'}</span>
+                </div>
+                
+                <div class="info-row">
+                    <strong>Account No:</strong> <span>${data.accountNo}</span>
+                </div>
+                <div class="info-row">
+                    <strong>Account Name:</strong> <span>${data.name}</span>
+                </div>
+                <div class="info-row">
+                    <strong>Report Date Opening Balance:</strong> <span>${data.amount}</span>
+                </div>
+                <div class="info-row">
+                    <strong>Report Date Closing Balance:</strong> <span>${data.currentBalance}</span>
+                </div>
+            </div>
+
+            <!-- ডিভাইডার লাইন -->
+            <hr class="divider">
+
+            <!-- ফুটার টেক্সট -->
+            <div class="footer-text">
+                &copy; 2026 United Commercial Bank PLC
+            </div>
+
+            <!-- নিচের ব্যানার কার্ড -->
+            <div class="promo-card">
+                <div class="promo-left">
+                    <img src="logo.png" alt="Banner" onerror="this.src='https://via.placeholder.com/60'">
+                    <div class="promo-title">UCB Bank PLC Service & Security</div>
+                </div>
+                <a href="#" class="learn-btn">Learn more</a>
+            </div>
+        `;
+    } else {
+        // ফেইলড বা ভুল আইডি হলে
+        container.innerHTML = `
+            <div class="error-box">
+                <h2>Invalid Request</h2>
+                <p>The verification link is invalid or the requested certificate information could not be found.</p>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
