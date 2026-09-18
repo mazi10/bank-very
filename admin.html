@@ -246,6 +246,11 @@
     <div class="output-section" id="outputSection" style="display: none;">
         <h3>কিউআর কোড প্রিভিউ</h3>
         <div id="qrcode"></div>
+        <!-- হাই-রেজুলেশন ডাউনলোড বাটন -->
+    <div style="margin: 10px 0;">
+        <button onclick="downloadQRCode('png')" style="background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px;">Download PNG</button>
+        <button onclick="downloadQRCode('jpg')" style="background: #16a34a; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Download JPG</button>
+    </div>
         <p id="qrTextLink" style="font-size: 13px; color: #555; word-break: break-all;"></p>
 
         <hr style="margin: 15px 0; border:0; border-top:1px solid #ccc;">
@@ -353,7 +358,60 @@
         navigator.clipboard.writeText(codeBox.value).then(() => {
             alert('কোড সফলভাবে কপি হয়েছে!');
         });
+
     }
+    function copyCode() {
+            const codeBox = document.getElementById('codeOutput');
+            codeBox.select();
+            codeBox.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(codeBox.value).then(() => {
+                alert('কোড সফলভাবে কপি হয়েছে!');
+            });
+        }
+
+        // কিউআর কোড হাই-রেজুলেশন ডাউনলোড ফাংশন (এটি এখানে পেস্ট করুন)
+        function downloadQRCode(format) {
+            const qrImage = document.querySelector("#qrcode img") || document.querySelector("#qrcode canvas");
+            
+            if (!qrImage) {
+                alert("প্রথমে কিউআর কোড জেনারেট করুন!");
+                return;
+            }
+
+            let imageUrl = "";
+
+            if (qrImage.tagName === "IMG") {
+                imageUrl = qrImage.src;
+            } else if (qrImage.tagName === "CANVAS") {
+                imageUrl = qrImage.toDataURL("image/png");
+            }
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            const img = new Image();
+            
+            img.crossOrigin = "anonymous";
+            img.src = imageUrl;
+            
+            img.onload = function() {
+                canvas.width = img.width * 4;
+                canvas.height = img.height * 4;
+                
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                let mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+                let dataURL = canvas.toDataURL(mimeType, 1.0);
+
+                const link = document.createElement('a');
+                link.download = `QR-Code-HighRes.${format}`;
+                link.href = dataURL;
+                link.click();
+            };
+        }
+
 </script>
 
 </body>
