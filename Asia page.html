@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asia Bank - Account Certificate Verification</title>
+    <!-- ডাইনামিক ডেটা ফাইল লোড করা -->
+    <script src="data.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        /* টপ হেডার ও লোগো */
+        .top-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 3px solid #004080;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .top-header img {
+            height: 42px;
+            object-fit: contain;
+        }
+        .top-header h2 {
+            font-size: 17px;
+            margin: 0;
+            color: #004080;
+            font-weight: bold;
+        }
+
+        /* ভেরিফিকেশন স্ট্যাটাস ব্যাজ */
+        .verification-badge {
+            background-color: #e6f4ea;
+            color: #137333;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sub-text {
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* ইনফো কার্ড স্টাইল */
+        .info-card {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #004080;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        .card-label {
+            font-size: 11px;
+            color: #5f6368;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .card-value {
+            font-size: 15px;
+            color: #202124;
+            font-weight: bold;
+        }
+
+        /* ফুটার অংশ */
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #80868b;
+            margin-top: 25px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+        }
+
+        /* 404 এরর ডিজাইন */
+        .error-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .error-box h1 {
+            font-size: 55px;
+            color: #d93025;
+            margin: 0;
+        }
+        .error-box h2 {
+            color: #202124;
+            margin: 10px 0;
+        }
+        .error-box p {
+            color: #5f6368;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <!-- ডাইনামিক ডেটা লোড হবে -->
+</div>
+
+<script>
+    // URL থেকে Unique ID নেওয়া
+    const urlParams = new URLSearchParams(window.location.search);
+    const accountId = urlParams.get('id');
+    const container = document.getElementById('mainContainer');
+
+    if (accountId && employeesData[accountId]) {
+        const data = employeesData[accountId];
+
+        container.innerHTML = `
+            <!-- টপ লোগো ও হেডার -->
+            <div class="top-header">
+                <img src="asia-logo.png" alt="Asia Bank Logo" onerror="this.src='logo.png'">
+                <h2>Asia Bank PLC - Certificate Verification</h2>
+            </div>
+
+            <!-- স্ট্যাটাস ব্যাজ -->
+            <div class="verification-badge">
+                <span>✔ SECURE VERIFICATION SUCCESSFUL</span>
+            </div>
+            <div class="sub-text">
+                The following information was securely retrieved from the official database and verified via QR code scan.
+            </div>
+
+            <!-- ইনফো ফিল্ডসমূহ -->
+            <div class="info-card">
+                <div class="card-label">Account Number</div>
+                <div class="card-value">${data.accountNo}</div>
+            </div>
+
+            <div class="info-card">
+                <div class="card-label">Account Holder Name</div>
+                <div class="card-value">${data.name}</div>
+            </div>
+
+            <div class="info-card">
+                <div class="card-label">Report Date Balance / Amount</div>
+                <div class="card-value">${data.amount}</div>
+            </div>
+
+            <div class="info-card">
+                <div class="card-label">Current Balance</div>
+                <div class="card-value">${data.currentBalance}</div>
+            </div>
+
+            <div class="footer">
+                &copy; 2026 Asia Bank PLC. All rights reserved. Secure Banking Portal.
+            </div>
+        `;
+    } else {
+        // আইডি না মিললে 404 পেজ দেখাবে
+        container.innerHTML = `
+            <div class="error-box">
+                <h1>404</h1>
+                <h2>কিছু খুঁজে পাওয়া যায়নি</h2>
+                <p>The verification link is invalid or the requested account information could not be found in our database.</p>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
