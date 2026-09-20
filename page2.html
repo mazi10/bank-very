@@ -3,199 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Verification - Page 2</title>
-    <!-- ডাইনামিক ডেটা ফাইল লোড করা -->
-    <script src="data.js"></script>
+    <title>Dutch-Bangla Bank PLC - Secure QR Verification Certificate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            color: #333333;
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', 'Hind Siliguri', sans-serif; 
+            background: #eef2f7; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            color: #0f172a; 
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+
+        /* Main Document Wrapper - Classic Corporate Certificate Style */
+        .doc-wrapper {
             background: #ffffff;
-            padding: 15px;
+            width: 100%;
+            max-width: 620px;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border: 1px solid #cbd5e1;
+            position: relative;
+            margin-top: 10px;
+            overflow: hidden;
         }
-        /* টপ হেডার (লোগো ও টাইটেল) */
-        .top-header {
+
+        /* Top Bank Official Header (DBBL Signature Blue & Orange Theme) */
+        .bank-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .bank-logo-area {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 15px;
         }
-        .top-header img {
-            height: 40px;
+        .bank-logo-area img {
+            height: 48px;
             object-fit: contain;
         }
-        .title-area h2 {
-            font-size: 18px;
+        .bank-title-text h1 {
+            font-size: 19px;
+            color: #0056b3;
             margin: 0;
-            color: #111111;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .bank-title-text p {
+            font-size: 11.5px;
+            color: #64748b;
+            margin: 3px 0 0 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* ভেরিফিকেশন স্ট্যাটাস ও ইনফো সেকশন */
-        .verification-box {
-            margin-top: 15px;
-        }
-        .status-text {
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .status-text span {
-            color: #16a34a;
-        }
-        .info-row {
-            font-size: 14px;
-            margin-bottom: 6px;
-            display: flex;
-        }
-        .info-row strong {
-            width: 150px;
-            color: #444444;
-        }
-        .info-row span {
-            color: #111111;
-        }
-
-        /* ডিভাইডার লাইন */
-        .divider {
-            border: none;
-            border-top: 1px solid #000000;
-            margin: 20px 0 15px 0;
-        }
-
-        /* ফুটার বা কপিরাইট টেক্সট */
-        .footer-text {
+        .auth-badge {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            padding: 6px 12px;
+            border-radius: 4px;
             font-size: 11px;
-            color: #555555;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Certificate Title Section */
+        .cert-title-box {
+            text-align: center;
             margin-bottom: 25px;
         }
-
-        /* নিচের ব্যানার বা প্রমোশনাল কার্ড সেকশন */
-        .promo-card {
-            border: 1px solid #e2e8f0;
-            background: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-radius: 4px;
-            max-width: 450px;
-        }
-        .promo-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .promo-left img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-        .promo-title {
-            font-size: 13px;
-            font-weight: bold;
+        .cert-title-box h3 {
+            font-size: 16px;
             color: #1e293b;
+            text-transform: uppercase;
+            margin: 0 0 5px 0;
+            letter-spacing: 1px;
+            font-weight: 700;
         }
-        .learn-btn {
-            background: #334155;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .learn-btn:hover {
-            background: #1e293b;
+        .cert-title-box span {
+            font-size: 12.5px;
+            color: #64748b;
         }
 
-        /* এরর বা ইনভ্যালিড পেজ ডিজাইন */
+        /* Data Table Style - Clean & Classic */
+        .statement-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .statement-table tr {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .statement-table tr:last-child {
+            border-bottom: none;
+        }
+        .statement-table td {
+            padding: 16px 10px;
+            font-size: 14px;
+        }
+        .statement-table td.label-col {
+            color: #475569;
+            font-weight: 500;
+            width: 45%;
+        }
+        .statement-table td.value-col {
+            color: #0f172a;
+            font-weight: 600;
+            text-align: right;
+            width: 55%;
+        }
+        .statement-table td.value-col.highlight {
+            color: #0056b3;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        /* Digital Security Stamp Box */
+        .security-stamp {
+            background: #f8fafc;
+            border: 1px dashed #94a3b8;
+            padding: 15px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        .stamp-left {
+            font-size: 12px;
+            color: #475569;
+        }
+        .stamp-left strong {
+            color: #0f172a;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .stamp-right {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: #0056b3;
+            font-weight: 700;
+            border: 1px solid #0056b3;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+
+        /* Error Box */
         .error-box {
-            padding: 40px 20px;
+            background: #fff;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Classic Footer Navigation */
+        .doc-footer {
+            margin-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
             text-align: center;
         }
-        .error-box h2 {
-            color: #dc2626;
-            margin-bottom: 10px;
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .footer-links a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .footer-links span {
+            color: #cbd5e1;
+        }
+        .copyright-text {
+            font-size: 11px;
+            color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-<div class="container" id="mainContainer">
-    <!-- ডাইনামিক ডেটা লোড হবে -->
+<div class="doc-wrapper" id="mainCard">
+    <!-- Bank Header -->
+    <div class="bank-header">
+        <div class="bank-logo-area">
+            <!-- ডাচ-বাংলা ব্যাংকের লোগো ফাইলের নাম এখানে দিতে পারেন, যেমন: dbbl-logo.png -->
+            <img src="dbbl-logo.png" alt="Dutch-Bangla Bank" onerror="this.style.display='none'">
+            <div class="bank-title-text" id="headerBox">
+                <h1>DUTCH-BANGLA BANK PLC.</h1>
+                <p>Secure Verification Portal</p>
+            </div>
+        </div>
+        <div>
+            <div class="auth-badge" id="statusText">✔ AUTHENTICATED</div>
+        </div>
+    </div>
+
+    <!-- Certificate Title -->
+    <div class="cert-title-box">
+        <h3>Digital Account & Balance Certificate</h3>
+        <span>Cryptographically verified via DBBL Official QR System</span>
+    </div>
+
+    <!-- Data Table -->
+    <table class="statement-table">
+        <tr>
+            <td class="label-col">Account Number</td>
+            <td class="value-col" id="accountNo">---</td>
+        </tr>
+        <tr>
+            <td class="label-col">Account Holder Name</td>
+            <td class="value-col" id="accountName">---</td>
+        </tr>
+        <tr>
+            <td class="label-col">Verified Balance / Amount</td>
+            <td class="value-col highlight" id="amount">---</td>
+        </tr>
+        <tr>
+            <td class="label-col">Report Generation Date</td>
+            <td class="value-col" id="date">---</td>
+        </tr>
+    </table>
+
+    <!-- Security Stamp -->
+    <div class="security-stamp">
+        <div class="stamp-left">
+            <strong>Secured Digital Document</strong>
+            This record is digitally signed and verified by Dutch-Bangla Bank automated gateway.
+        </div>
+        <div class="stamp-right">
+            DBBL-SECURE
+        </div>
+    </div>
+
+    <!-- Footer Links inside Document -->
+    <div class="doc-footer">
+        <div class="footer-links">
+            <a href="about.html" target="_blank">About Us</a>
+            <span>&bull;</span>
+            <a href="help.html" target="_blank">Help Center</a>
+            <span>&bull;</span>
+            <a href="faq.html" target="_blank">FAQ</a>
+            <span>&bull;</span>
+            <a href="contact.html" target="_blank">Contact Us</a>
+            <span>&bull;</span>
+            <a href="privacy.html" target="_blank">Privacy Policy</a>
+            <span>&bull;</span>
+            <a href="terms.html" target="_blank">Terms & Conditions</a>
+            <span>&bull;</span>
+            <a href="security.html" target="_blank">Security Guidelines</a>
+        </div>
+        <div class="copyright-text">
+            &copy; 2026 DUTCH-BANGLA BANK PLC. All Rights Reserved. &bull; Official Secure Verification Portal
+        </div>
+    </div>
 </div>
 
+<script src="data.js"></script>
 <script>
-    // URL থেকে Unique ID নেওয়া
     const urlParams = new URLSearchParams(window.location.search);
-    const accountId = urlParams.get('id');
-    const container = document.getElementById('mainContainer');
+    const uniqueId = urlParams.get('id');
 
-    if (accountId && employeesData[accountId]) {
-        const data = employeesData[accountId];
+    if (uniqueId && typeof bankData !== 'undefined' && bankData[uniqueId]) {
+        const data = bankData[uniqueId];
 
-        container.innerHTML = `
-            <!-- টপ হেডার -->
-            <div class="top-header">
-                <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
-                <div class="title-area" style="font-family: ${data.fontFamily || 'Arial, sans-serif'};">
-                    ${data.headerHtml}
-                </div>
-            </div>
-
-            <!-- ভেরিফিকেশন স্ট্যাটাস ও ডিটেলস -->
-            <div class="verification-box">
-                <div class="status-text">
-                    Verification Status: <span id="statusSpan">${data.statusText || 'Verification success!!!'}</span>
-                </div>
-                
-                <div class="info-row">
-                    <strong>Account No:</strong> <span>${data.accountNo}</span>
-                </div>
-                <div class="info-row">
-                    <strong>Account Name:</strong> <span>${data.name}</span>
-                </div>
-                <div class="info-row">
-                    <strong>Report Date Opening Balance:</strong> <span>${data.amount}</span>
-                </div>
-                <div class="info-row">
-                    <strong>Report Date Closing Balance:</strong> <span>${data.currentBalance}</span>
-                </div>
-            </div>
-
-            <!-- ডিভাইডার লাইন -->
-            <hr class="divider">
-
-            <!-- ফুটার টেক্সট -->
-            <div class="footer-text">
-                &copy; 2026 United Commercial Bank PLC
-            </div>
-
-            <!-- নিচের ব্যানার কার্ড -->
-            <div class="promo-card">
-                <div class="promo-left">
-                    <img src="logo.png" alt="Banner" onerror="this.src='https://via.placeholder.com/60'">
-                    <div class="promo-title">UCB Bank PLC Service & Security</div>
-                </div>
-                <a href="#" class="learn-btn">Learn more</a>
-            </div>
-        `;
+        if(data.headerHtml) {
+            document.getElementById('headerBox').innerHTML = data.headerHtml;
+        }
+        
+        document.getElementById('accountNo').innerText = data.accountNo || '---';
+        document.getElementById('accountName').innerText = data.name || '---';
+        document.getElementById('amount').innerText = data.amount || '---';
+        document.getElementById('date').innerText = data.date || '---';
+        document.getElementById('statusText').innerText = data.statusText || '✔ AUTHENTICATED';
     } else {
-        // ফেইলড বা ভুল আইডি হলে
-        container.innerHTML = `
+        document.getElementById('mainCard').innerHTML = `
             <div class="error-box">
-                <h2>Invalid Request</h2>
-                <p>The verification link is invalid or the requested certificate information could not be found.</p>
+                <h3 style="color: #dc2626; margin-bottom: 8px; font-size: 18px;">⚠️ তথ্য পাওয়া যায়নি!</h3>
+                <p style="font-size: 13.5px; color: #64748b; margin: 0;">সঠিক কিউআর কোড স্ক্যান করুন অথবা লিঙ্কটি সঠিকভাবে যাচাই করুন।</p>
             </div>
         `;
     }
